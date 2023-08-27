@@ -29,13 +29,13 @@ router.post("/create", async (req, res) => {
         name: req.body.name,
         email: req.body.email,
         password: hashedPassword
-    }); //YORUM: Buraya oluşturma tarihi de eklenebilir. İşe yaracağı senaryolar mutlaka ortaya çıkacaktır
+    }); 
 
     await user.save();
 
     const token = user.createAuthToken();
 
-    res.header("x-auth-token", token).send(user); //Burada token verinin "header" kısmına ekleniyor. Çağırdığımız tarafta da header kontrol edilmeli token için (Eğer ihtiyaç var ise).
+    res.header("x-auth-token", token).send(user); 
 });
 
 //giriş için 
