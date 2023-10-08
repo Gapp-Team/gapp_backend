@@ -36,21 +36,33 @@ const productSchema = mongoose.Schema({
 
 // product şemasına ait validation (kurallar) burada tanımlandı. 
 
+// Ürün için olan validation
 function validateProduct(product) {
-    const schema = new Joi.object({
+    const schema = Joi.object({
         title: Joi.string().min(3).max(100).required(),
         author: Joi.string().min(3).max(30).required(),
         description: Joi.string().required(),
         imageUrl: Joi.string(),
         isActive: Joi.boolean(),
-        category: Joi.array(),      //api'da ["id","id"] şeklinde yazılacak. 
-        comments: Joi.array()
+        category: Joi.array(),
+        comments: Joi.array(),
     });
-
     return schema.validate(product);
 }
+
+// Yorum için olan validation
+function validateComment(comment) {
+    const schema = Joi.object({
+        text: Joi.string(),
+        likeCount: Joi.number().default(0),
+        username: Joi.string().required(),
+        userId: Joi.string().required(),
+    });
+    return schema.validate(comment);
+}
+
 
 const Product = mongoose.model("Product", productSchema); 
 const Comment = mongoose.model("Comment", commentSchema); 
 
-module.exports = { Product, Comment, validateProduct };
+module.exports = { Product, Comment, validateProduct,validateComment };
