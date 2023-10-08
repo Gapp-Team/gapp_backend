@@ -3,6 +3,8 @@ const express = require("express");
 const router = express.Router();
 const { User, validateLogin, validateRegister } = require("../models/user");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const config = require("config");
 
 router.get("/", async (req, res) => {
     res.send();
@@ -71,6 +73,35 @@ router.post("/auth", async (req, res) => {
         const token = user.createAuthToken();
 
         res.status(200).json({ message: "Giriş başarıyla yapıldı.", token });
+    } catch (err) {
+        console.error("Bir hata oluştu:", err);
+        res.status(500).json({ error: "Sunucu hatası" });
+    }
+});
+
+
+// Token gönderildiğinde kullanıcı adını ve mail adresini döndürme
+
+router.get("/userinfo", async (req, res) => {
+    try {
+       
+        const decoded = jwt.verify(req.header("x-auth-token"), config.get("auth.jwtPrivateKey"));
+        
+        const user = await User.findById(decoded._id).select("name email");
+        
+        res.status(200).json(user);
+    } catch (err) {
+        console.error("Bir hata oluştu:", err);
+        res.status(500).json({ error: "Sunucu hatası" });
+    }
+});
+
+// Tüm kullanıcıları getirme
+router.get("/allusers", async (req, res) => {
+    try {
+        const users = await User.find().select("name email");
+        
+        res.status(200).json(users);
     } catch (err) {
         console.error("Bir hata oluştu:", err);
         res.status(500).json({ error: "Sunucu hatası" });
