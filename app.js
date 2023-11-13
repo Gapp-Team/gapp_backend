@@ -19,6 +19,13 @@ app.use(cors({
     methods: ["*"]
 }));
 
+const swaggerJSDoc = require('swagger-jsdoc');
+const swaggerUI = require('swagger-ui-express');
+const options = require('./swaggerDef'); 
+const swaggerSpec = swaggerJSDoc(options);
+app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
+
+
 app.use("/api/products" ,products);
 app.use("/api/categories" ,categories);
 app.use("/api/users" ,users);
