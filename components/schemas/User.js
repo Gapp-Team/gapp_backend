@@ -6,6 +6,40 @@ const jwt = require("jsonwebtoken");
 
 //user şeması tanımlandı. ad(name),mail(email), şifre(password) ve admin olup olmadığını kontrol eden isAdmin var. 
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     UserInput:
+ *       type: object
+ *       required:
+ *       -name
+ *       -email
+ *       -password
+ *       properties:
+ *         name:
+ *           type: string
+ *           description: Kullanıcının adı.
+ *           minLength: 3
+ *           maxLength: 50
+ *           example: John Doe
+ *         email:
+ *           type: string
+ *           description: Kullanıcının e-posta adresi.
+ *           minLength: 3
+ *           maxLength: 50
+ *           format: email
+ *           example: john@example.com
+ *         password:
+ *           type: string
+ *           description: Kullanıcının şifresi.
+ *           minLength: 5
+ *           example: password123
+ *         isAdmin:
+ *           type: boolean
+ *           description: Kullanıcının yönetici (admin) olup olmadığını belirten alan.
+ */
+
 const userSchema = mongoose.Schema({
     name: {
         type: String,

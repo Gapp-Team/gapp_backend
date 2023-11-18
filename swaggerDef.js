@@ -1,17 +1,32 @@
 const swaggerDefinition = {
-    info: {
+  info: {
       title: 'Gapp',
-      version: '3.1.0',
+      version: '3.0.0',
       description: 'API documentation for Gapp',
-    },
-    basePath: '/',
-  };
-  
-  const options = {
-    swaggerDefinition,
-    apis: ['./routes/categories.js', './routes/products.js', './routes/users.js'],
-  };
-  
-  module.exports = options;
-  
-  
+  },
+  servers: [
+      { url: 'http://localhost:3000', description: 'Development Server' },
+      // Add more servers as needed
+  ],
+  components: {
+      securitySchemes: {
+          jwt: {
+              type: 'apiKey',
+              in: 'header',
+              name: 'Authorization',
+          },
+      },
+  },
+  security: [
+      {
+          jwt: [],
+      },
+  ],
+};
+
+const options = {
+  swaggerDefinition,
+  apis: ['./routes/*.js',  './components/schemas/*.js'],
+};
+
+module.exports = options;

@@ -26,6 +26,7 @@ const swaggerSpec = swaggerJSDoc(options);
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 
 
+
 app.use("/api/products" ,products);
 app.use("/api/categories" ,categories);
 app.use("/api/users" ,users);

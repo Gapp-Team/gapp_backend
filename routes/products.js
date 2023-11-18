@@ -4,9 +4,37 @@ const router = express.Router();
 const auth = require("../middware/auth");
 const isAdmin = require("../middware/isAdmin");
 
-const {Product, Comment, validateProduct,validateComment} = require("../models/product");
+const {Product, Comment, validateProduct,validateComment} = require("../components/schemas/Product");
 
-//tüm product'ları getirir
+/**
+ * @swagger
+ * tags:
+ *   name: Products
+ *   description: Ürün yönetimi
+ */
+
+
+/**
+ * @swagger
+ * /api/products:
+ *   get:
+ *     summary: Tüm ürünleri getirir.
+ *     tags: [Products]
+ *     responses:
+ *       200:
+ *         description: Başarılı istek.
+ *         content:
+ *           application/json:
+ *             example:
+ *               products: []
+ *       500:
+ *         description: Sunucu hatası.
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: Sunucu hatası
+ */
+
 router.get("/", async (req, res) => {
     try {
         const products = await Product.find()
@@ -20,7 +48,41 @@ router.get("/", async (req, res) => {
 });
 
 
-//yeni product eklenir.
+/**
+ * @swagger
+ * /api/products:
+ *   post:
+ *     summary: Yeni bir ürün ekler.
+ *     tags: [Products]
+ *     security:
+ *       - jwt: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Product'
+ *     responses:
+ *       201:
+ *         description: Yeni ürün başarıyla kaydedildi.
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: Yeni ürün başarıyla kaydedildi.
+ *               product: {}
+ *       400:
+ *         description: Geçersiz istek veya ürün bilgileri.
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: Geçersiz istek veya ürün bilgileri.
+ *       500:
+ *         description: Sunucu hatası.
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: Sunucu hatası
+ */
 router.post("/", [auth, isAdmin], async (req, res) => {
     try {
         const { error } = validateProduct(req.body);
@@ -48,7 +110,54 @@ router.post("/", [auth, isAdmin], async (req, res) => {
     }
 });
 
-//id'ye göre  product güncellenir
+/**
+ * @swagger
+ * /api/products/{id}:
+ *   put:
+ *     summary: Id'ye göre ürün günceller.
+ *     tags: [Products]
+ *     security:
+ *       - jwt: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: Güncellenecek ürünün ID'si.
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Product'
+ *     responses:
+ *       200:
+ *         description: Ürün başarıyla güncellendi.
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: Ürün başarıyla güncellendi.
+ *               updatedProduct: {}
+ *       400:
+ *         description: Geçersiz istek veya ürün bilgileri.
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: Geçersiz istek veya ürün bilgileri.
+ *       404:
+ *         description: Aradığınız ürün bulunamadı.
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: Aradığınız ürün bulunamadı.
+ *       500:
+ *         description: Sunucu hatası.
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: Sunucu hatası
+ */
 router.put("/:id", [auth, isAdmin], async (req, res) => {
     try {
         const product = await Product.findById(req.params.id);
@@ -79,7 +188,42 @@ router.put("/:id", [auth, isAdmin], async (req, res) => {
 });
 
 
-//id'ye göre product silinir
+/**
+ * @swagger
+ * /api/products/{id}:
+ *   delete:
+ *     summary: Id'ye göre ürün siler.
+ *     tags: [Products]
+ *     security:
+ *       - jwt: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: Silinecek ürünün ID'si.
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Ürün başarıyla silindi.
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: Ürün başarıyla silindi.
+ *               deletedProduct: {}
+ *       404:
+ *         description: Aradığınız ürün bulunamadı.
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: Aradığınız ürün bulunamadı.
+ *       500:
+ *         description: Sunucu hatası.
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: Sunucu hatası
+ */
 router.delete("/:id", [auth, isAdmin], async (req, res) => {
     try {
         const product = await Product.findByIdAndDelete(req.params.id);
@@ -96,7 +240,40 @@ router.delete("/:id", [auth, isAdmin], async (req, res) => {
 });
 
 
-//id'ye göre product getirir
+/**
+ * @swagger
+ * /api/products/{id}:
+ *   get:
+ *     summary: Id'ye göre ürün getirir.
+ *     tags: [Products]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: Getirilecek ürünün ID'si.
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Ürün başarıyla getirildi.
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: Ürün başarıyla getirildi.
+ *               product: {}
+ *       404:
+ *         description: Aradığınız ürün bulunamadı.
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: Aradığınız ürün bulunamadı.
+ *       500:
+ *         description: Sunucu hatası.
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: Sunucu hatası
+ */
 router.get("/:id", async (req, res) => {
     try {
         const product = await Product.findById(req.params.id).populate("category", "name -_id");
@@ -112,8 +289,41 @@ router.get("/:id", async (req, res) => {
     }
 });
 
-//categoriye göre product getirir.
-router.get("/by_category/:id", async (req, res) => {
+/**
+ * @swagger
+ * /api/products/byCategory/{categoryId}:
+ *   get:
+ *     summary: Kategoriye göre ürün getirir.
+ *     tags: [Products]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: Getirilecek ürünlerin kategori ID'si.
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Ürünler başarıyla getirildi.
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: Ürünler başarıyla getirildi.
+ *               products: []
+ *       404:
+ *         description: Bu kategoriye ait ürün bulunamadı.
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: Bu kategoriye ait ürün bulunamadı.
+ *       500:
+ *         description: Sunucu hatası.
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: Sunucu hatası
+ */
+router.get("/byCategory/:categoryId", async (req, res) => {
     try {
         const category_id = req.params.id;
 
@@ -133,8 +343,41 @@ router.get("/by_category/:id", async (req, res) => {
 });
 
 
-// Ürüne yapılan tüm yorumları getirir
-router.get("/comment/:productId/comments", async (req, res) => {
+/**
+ * @swagger
+ * /api/products/comment/{productId}:
+ *   get:
+ *     summary: Ürüne yapılan tüm yorumları getirir.
+ *     tags: [ProductComments]
+ *     parameters:
+ *       - in: path
+ *         name: productId
+ *         required: true
+ *         description: Yorumları getirilecek ürünün ID'si.
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Ürüne yapılan tüm yorumlar başarıyla getirildi.
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: Ürüne yapılan tüm yorumlar başarıyla getirildi.
+ *               comments: []
+ *       404:
+ *         description: Ürün bulunamadı.
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: Ürün bulunamadı.
+ *       500:
+ *         description: Sunucu hatası.
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: Sunucu hatası
+ */
+router.get("/comment/:productId", async (req, res) => {
     try {
         const productId = req.params.productId;
 
@@ -153,7 +396,55 @@ router.get("/comment/:productId/comments", async (req, res) => {
     }
 });
 
-// Ürüne yorum ekler
+/**
+ * @swagger
+ * /api/products/comment/{productId}:
+ *   post:
+ *     summary: Ürüne yorum ekler.
+ *     tags: [ProductComments]
+ *     security:
+ *       - jwt: []
+ *     parameters:
+ *       - in: path
+ *         name: productId
+ *         required: true
+ *         description: Yoruma eklenecek ürünün ID'si.
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Comment'
+ *     responses:
+ *       201:
+ *         description: Yorum başarıyla eklendi.
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: Yorum başarıyla eklendi.
+ *               comment: {}
+ *               updatedProduct: {}
+ *       400:
+ *         description: Geçersiz istek veya yorum bilgileri.
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: Geçersiz istek veya yorum bilgileri.
+ *       404:
+ *         description: Ürün bulunamadı.
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: Ürün bulunamadı.
+ *       500:
+ *         description: Sunucu hatası.
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: Sunucu hatası
+ */
 
 router.post("/comment/:productId", auth,async (req, res) => {
     try {
@@ -189,7 +480,61 @@ router.post("/comment/:productId", auth,async (req, res) => {
 
 
 
-//id'ye göre  comment güncellenir
+/**
+ * @swagger
+ * /api/products/comment/{productId}/{commentId}:
+ *   put:
+ *     summary: Ürün yorumunu günceller.
+ *     tags: [ProductComments]
+ *     security:
+ *       - jwt: []
+ *     parameters:
+ *       - in: path
+ *         name: productId
+ *         required: true
+ *         description: Yorumu güncellenecek ürünün ID'si.
+ *         schema:
+ *           type: string
+ *       - in: path
+ *         name: commentId
+ *         required: true
+ *         description: Güncellenecek yorumun ID'si.
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Comment'
+ *     responses:
+ *       200:
+ *         description: Yorum başarıyla güncellendi.
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: Yorum başarıyla güncellendi.
+ *               updatedProduct: {}
+ *       400:
+ *         description: Geçersiz istek veya yorum bilgileri.
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: Geçersiz istek veya yorum bilgileri.
+ *       404:
+ *         description: Ürün veya yorum bulunamadı.
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: Ürün veya yorum bulunamadı.
+ *       500:
+ *         description: Sunucu hatası.
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: Sunucu hatası
+ */
+
 router.put("/comment/:productId/:commentId",auth,  async (req, res) => {
     try {
         const product = await Product.findById(req.params.productId);
@@ -215,7 +560,48 @@ router.put("/comment/:productId/:commentId",auth,  async (req, res) => {
 });
 
 
-//id'ye göre  comment silinir
+/**
+ * @swagger
+ * /api/products/comment/{productId}/{commentId}:
+ *   delete:
+ *     summary: Ürün yorumunu siler.
+ *     tags: [ProductComments]
+ *     security:
+ *       - jwt: []
+ *     parameters:
+ *       - in: path
+ *         name: productId
+ *         required: true
+ *         description: Yorumun bulunduğu ürünün ID'si.
+ *         schema:
+ *           type: string
+ *       - in: path
+ *         name: commentId
+ *         required: true
+ *         description: Silinecek yorumun ID'si.
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Yorum başarıyla silindi.
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: Yorum başarıyla silindi.
+ *               updatedProduct: {}
+ *       404:
+ *         description: Aradığınız ürün veya yorum bulunamadı.
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: Aradığınız ürün veya yorum bulunamadı.
+ *       500:
+ *         description: Sunucu hatası.
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: Sunucu hatası
+ */
 router.delete("/comment/:productId/:commentId", auth, async (req, res) => {
     try {
         const product = await Product.findById(req.params.productId);
