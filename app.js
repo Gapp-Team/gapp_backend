@@ -6,6 +6,7 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 
 
+
 const products = require("./routes/products");
 const categories = require("./routes/categories");
 const users = require("./routes/users");
@@ -18,6 +19,14 @@ app.use(cors({
     origin: "*",
     methods: ["*"]
 }));
+
+const swaggerJSDoc = require('swagger-jsdoc');
+const swaggerUI = require('swagger-ui-express');
+const options = require('./swaggerDef'); 
+const swaggerSpec = swaggerJSDoc(options);
+app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
+
+
 
 app.use("/api/products" ,products);
 app.use("/api/categories" ,categories);
