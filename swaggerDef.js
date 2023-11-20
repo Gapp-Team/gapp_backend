@@ -1,12 +1,11 @@
 const swaggerDefinition = {
   info: {
       title: 'Gapp',
-      version: '3.0.0',
+      version: '3.0.3',
       description: 'API documentation for Gapp',
   },
   servers: [
       { url: 'http://localhost:3000', description: 'Development Server' },
-      // Add more servers as needed
   ],
   components: {
       securitySchemes: {

@@ -6,6 +6,7 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 
 
+
 const products = require("./routes/products");
 const categories = require("./routes/categories");
 const users = require("./routes/users");

@@ -10,8 +10,36 @@ router.get("/", async (req, res) => {
     res.send();
 });
 
-//yeni kullanıcı ekleme
-// api/users/create : POST
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     User:
+ *       type: object
+ *       required: [name, email, password]
+ *       properties:
+ *         name:
+ *           type: string
+ *           description: Kullanıcının adı.
+ *           minLength: 3
+ *           maxLength: 50
+ *           example: John Doe
+ *         email:
+ *           type: string
+ *           description: Kullanıcının e-posta adresi.
+ *           minLength: 3
+ *           maxLength: 50
+ *           format: email
+ *           example: john@example.com
+ *         password:
+ *           type: string
+ *           description: Kullanıcının şifresi.
+ *           minLength: 5
+ *           example: password123
+ *         isAdmin:
+ *           type: boolean
+ *           description: Kullanıcının yönetici (admin) olup olmadığını belirten alan.
+ */
 
 /**
  * @swagger
@@ -24,7 +52,7 @@ router.get("/", async (req, res) => {
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/UserInput'
+ *             $ref: '#/components/schemas/User'
  *     responses:
  *       200:
  *         description: Başarıyla kaydedildi.
