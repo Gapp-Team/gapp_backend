@@ -323,6 +323,8 @@ router.get("/:id", async (req, res) => {
  *             example:
  *               error: Sunucu hatası
  */
+
+
 router.get("/byCategory/:categoryId", async (req, res) => {
     try {
         const category_id = req.params.categoryId;
@@ -332,15 +334,43 @@ router.get("/byCategory/:categoryId", async (req, res) => {
         }).populate("category");
 
         if (products.length === 0) {
-            return res.status(404).send("Bu kategoriye ait ürün bulunamadı.");
+            return res.status(404).json({
+                success: false,
+                message: "No products found for the specified category.",
+                error: {
+                    code: 404,
+                    details: "No products found for the specified category."
+                }
+            });
         }
 
-        res.status(200).json({ message: "Ürünler başarıyla getirildi.", products });
+        res.status(200).json({ success: true, message: "Ürünler başarıyla getirildi.", products });
     } catch (err) {
         console.error("Bir hata oluştu:", err);
-        res.status(500).json({ error: "Sunucu hatası" });
+
+        if (err.name === "CastError" && err.kind === "ObjectId") {
+            // Geçersiz bir ObjectId hatası
+            return res.status(400).json({
+                success: false,
+                message: "Geçersiz kategori ID'si.",
+                error: {
+                    code: 400,
+                    details: "Invalid category ID."
+                }
+            });
+        }
+
+        return res.status(500).json({
+            success: false,
+            message: "Sunucu hatası.",
+            error: {
+                code: 500,
+                details: "Internal Server Error."
+            }
+        });
     }
 });
+
 
 
 /**
