@@ -325,7 +325,7 @@ router.get("/:id", async (req, res) => {
  */
 router.get("/byCategory/:categoryId", async (req, res) => {
     try {
-        const category_id = req.params.id;
+        const category_id = req.params.categoryId;
 
         const products = await Product.find({
             category: category_id
