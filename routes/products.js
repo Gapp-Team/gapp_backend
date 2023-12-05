@@ -6,6 +6,10 @@ const isAdmin = require("../middware/isAdmin");
 
 const {Product, Comment, validateProduct,validateComment} = require("../components/schemas/Product");
 
+const multer = require("multer");
+const path = require("path");
+const fs = require("fs/promises"); 
+
 /**
  * @swagger
  * tags:
@@ -187,6 +191,59 @@ router.put("/:id", [auth, isAdmin], async (req, res) => {
     }
 });
 
+// Multer konfigürasyonu
+// const storage = multer.diskStorage({
+//     destination: function (req, file, cb) {
+//       cb(null, "uploads/");
+//     },
+//     filename: function (req, file, cb) {
+//       const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+//       const extension = path.extname(file.originalname);
+//       cb(null, file.fieldname + "-" + uniqueSuffix + extension);
+//     },
+//   });
+  
+//   const upload = multer({ storage: storage });
+  
+//   // Mevcut kodunuz devam ediyor...
+  
+//   // Dosya yükleme endpoint'i
+//   router.put("/:id", [ upload.single("image")], async (req, res) => {
+//     try {
+//       const product = await Product.findById(req.params.id);
+//       if (!product) {
+//         return res.status(404).send("Aradığınız ürün bulunamadı.");
+//       }
+  
+//       const { error } = validateProduct(req.body);
+  
+//       if (error) {
+//         return res.status(400).send(error.details[0].message);
+//       }
+  
+//       // Eğer dosya yüklendiyse, önceki dosyayı sil
+//       if (req.file) {
+//         const previousImagePath = product.imageUrl;
+//         await fs.unlink(previousImagePath);
+//       }
+  
+//       product.title = req.body.title;
+//       product.author = req.body.author;
+//       product.description = req.body.description;
+//       product.imageUrl = req.file ? `uploads/${req.file.filename}` : req.body.imageUrl;
+//       product.isActive = req.body.isActive;
+//       product.category = req.body.category;
+  
+//       const updatedProduct = await product.save();
+  
+//       res.status(200).json({ message: "Ürün başarıyla güncellendi.", updatedProduct });
+//     } catch (err) {
+//       console.error("Bir hata oluştu:", err);
+//       res.status(500).json({ error: "Sunucu hatası" });
+//     }
+//   });
+  
+
 
 /**
  * @swagger
@@ -276,7 +333,7 @@ router.delete("/:id", [auth, isAdmin], async (req, res) => {
  */
 router.get("/:id", async (req, res) => {
     try {
-        const product = await Product.findById(req.params.id).populate("category", "name -_id");
+        const product = await Product.findById(req.params.id).populate("category", "name _id");
 
         if (!product) {
             return res.status(404).send("Aradığınız ürün bulunamadı.");

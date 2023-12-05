@@ -5,7 +5,7 @@ const swaggerDefinition = {
       description: 'API documentation for Gapp',
   },
   servers: [
-      { url: 'http://localhost:3000', description: 'Development Server' },
+      { url: 'http://192.168.0.26:3000', description: 'Development Server' },
   ],
   components: {
       securitySchemes: {
