@@ -61,7 +61,7 @@ if(process.env.NODE_ENV == "production") {
 // });
 
 const port = process.env.PORT || 3000;
-const ip = '192.168.0.26';
+const ip = '192.168.0.37';
 
 app.listen(port, ip, () => {
     console.log(`listening on port ${port}`);

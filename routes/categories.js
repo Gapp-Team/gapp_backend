@@ -136,6 +136,8 @@ router.post("/", [auth, isAdmin], async (req, res) => {
 
         const category = new Category({
             name: req.body.name,
+            imageUrl: req.body.imageUrl,
+
         });
 
         const newCategory = await category.save();
@@ -208,6 +210,8 @@ router.put("/:id", [auth, isAdmin], async (req, res) => {
         }
 
         category.name = req.body.name;
+        category.imageUrl = req.body.imageUrl;
+
 
         const updatedCategory = await category.save();
 

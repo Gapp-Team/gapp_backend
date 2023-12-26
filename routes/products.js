@@ -87,7 +87,7 @@ router.get("/", async (req, res) => {
  *             example:
  *               error: Sunucu hatası
  */
-router.post("/", [auth, isAdmin], async (req, res) => {
+router.post("/",  async (req, res) => {
     try {
         const { error } = validateProduct(req.body);
 
@@ -100,6 +100,7 @@ router.post("/", [auth, isAdmin], async (req, res) => {
             author: req.body.author,
             description: req.body.description,
             imageUrl: req.body.imageUrl,
+            videoUrl: req.body.videoUrl,
             isActive: req.body.isActive,
             category: req.body.category,
             comments: req.body.comments
@@ -162,7 +163,7 @@ router.post("/", [auth, isAdmin], async (req, res) => {
  *             example:
  *               error: Sunucu hatası
  */
-router.put("/:id", [auth, isAdmin], async (req, res) => {
+router.put("/:id",  async (req, res) => {
     try {
         const product = await Product.findById(req.params.id);
         if (!product) {
@@ -179,6 +180,7 @@ router.put("/:id", [auth, isAdmin], async (req, res) => {
         product.author = req.body.author;
         product.description = req.body.description;
         product.imageUrl = req.body.imageUrl;
+        product.videoUrl= req.body.videoUrl,
         product.isActive = req.body.isActive;
         product.category = req.body.category;
 
@@ -281,7 +283,7 @@ router.put("/:id", [auth, isAdmin], async (req, res) => {
  *             example:
  *               error: Sunucu hatası
  */
-router.delete("/:id", [auth, isAdmin], async (req, res) => {
+router.delete("/:id",  async (req, res) => {
     try {
         const product = await Product.findByIdAndDelete(req.params.id);
 

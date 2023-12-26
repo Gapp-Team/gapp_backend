@@ -25,6 +25,7 @@ const productSchema = mongoose.Schema({
     author:String,
     description: String,
     imageUrl: String,
+    videoUrl: String,
     date: {
         type: Date,
         default: Date.now
@@ -43,6 +44,7 @@ function validateProduct(product) {
         author: Joi.string().min(3).max(30).required(),
         description: Joi.string().required(),
         imageUrl: Joi.string(),
+        videoUrl: Joi.string(),
         isActive: Joi.boolean(),
         category: Joi.array(),
         comments: Joi.array(),
