@@ -3,8 +3,10 @@ const { mongoose, Schema } = require("mongoose");
 const Joi = require("joi");
 const jwt = require("jsonwebtoken");
 
+mongoose.set('strictQuery', false);
 
-//user şeması tanımlandı. ad(name),mail(email), şifre(password) ve admin olup olmadığını kontrol eden isAdmin var. 
+
+
 
 const userSchema = mongoose.Schema({
     name: {
